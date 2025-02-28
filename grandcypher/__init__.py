@@ -208,8 +208,13 @@ def _is_node_attr_match(
 
     for attr, val in motif_node.items():
         if attr == "__labels__":
-            if val and val - host_node.get("__labels__", set()):
-                return False
+            labels = host_node.get("__labels__", None)
+            if isinstance(labels, list):
+                if val and val - set(labels):
+                    return False
+            if isinstance(labels, set):
+                if val and val - labels:
+                    return False
             continue
         if host_node.get(attr) != val:
             return False
